@@ -7,6 +7,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -17,10 +18,14 @@ public class Driver extends Configured implements Tool{
         Job job = Job.getInstance(conf, "TweetsSecondJob");
         job.setJarByClass(Driver.class);
         job.setMapperClass(Map.class);
+        job.setCombinerClass(Reduce.class);
         job.setReducerClass(Reduce.class);
+
+
         job.setInputFormatClass(KeyValueTextInputFormat.class); // added to work with Text as Input Key
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
 
         System.out.println("Input dir: " + "/home/mauroliuzzo/IdeaProjects/Tweets-Second-Job/input/");
         System.out.println("Output dir: " + "/home/mauroliuzzo/IdeaProjects/Tweets-Second-Job/output/");
